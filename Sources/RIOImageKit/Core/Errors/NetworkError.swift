@@ -16,10 +16,10 @@ public enum NetworkError: Error, Sendable {
     case invalidResponse(Int)
 
     /// Network request failed with an underlying error
-    case unknown(Error?)
+    case unknown((any Error)?)
 
     /// Failed to decode response data
-    case decodingError(Error)
+    case decodingError(any Error)
 }
 
 // MARK: - LocalizedError

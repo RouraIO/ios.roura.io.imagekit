@@ -60,7 +60,7 @@ public final class ImageCacheManager {
     // MARK: - Properties
 
     /// Service for downloading images from the network
-    public let imageLoadable: ImageLoadable
+    public let imageLoadable: any ImageLoadable
 
     /// Fast, volatile memory cache
     private let memoryCache: MemoryImageCache
@@ -78,7 +78,7 @@ public final class ImageCacheManager {
     ///   - memoryCache: Memory cache instance.
     ///   - diskCache: Disk cache instance.
     public init(
-        imageLoadable: ImageLoadable,
+        imageLoadable: any ImageLoadable,
         memoryCache: MemoryImageCache,
         diskCache: DiskImageCache
     ) {

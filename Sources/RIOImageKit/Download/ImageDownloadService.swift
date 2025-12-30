@@ -166,7 +166,7 @@ extension ImageDownloadService: ImageLoadable {
     /// - Returns: The downloaded data.
     /// - Throws: Network errors or timeout errors.
     private func downloadData(from url: URL, progress: @escaping @Sendable (Double) -> Void) async throws -> Data {
-        var lastError: Error?
+        var lastError: (any Error)?
 
         // Retry logic with exponential backoff
         for attempt in 0..<maxRetries {

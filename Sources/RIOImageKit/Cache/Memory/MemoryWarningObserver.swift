@@ -39,7 +39,7 @@ public final class MemoryWarningObserver: @unchecked Sendable {
     private let handler: @Sendable () -> Void
 
     /// Notification observer token
-    private var observer: NSObjectProtocol?
+    private var observer: (any NSObjectProtocol)?
 
 
     // MARK: - Initialization

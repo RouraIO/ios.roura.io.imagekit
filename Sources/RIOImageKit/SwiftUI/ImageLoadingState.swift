@@ -54,7 +54,7 @@ public enum ImageLoadingState: Equatable {
     /// Loading failed with an error
     ///
     /// - Parameter error: The error that occurred
-    case failure(error: Error)
+    case failure(error: any Error)
 
 
     // MARK: - Equatable Conformance
@@ -117,7 +117,7 @@ public extension ImageLoadingState {
 
 
     /// The error if loading failed
-    var error: Error? {
+    var error: (any Error)? {
 
         if case .failure(let error) = self {
             return error

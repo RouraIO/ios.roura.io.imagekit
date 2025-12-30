@@ -73,7 +73,7 @@ public protocol ImageProcessor: Sendable {
 /// - Throws: An error if any processor fails.
 public func processImage(
     _ image: PlatformImage,
-    with processors: [ImageProcessor]
+    with processors: [any ImageProcessor]
 ) async throws -> PlatformImage {
 
     var currentImage = image

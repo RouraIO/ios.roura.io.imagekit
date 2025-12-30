@@ -30,7 +30,7 @@ public actor RequestDeduplicator {
     // MARK: - Properties
 
     /// Active download tasks keyed by URL
-    private var activeTasks: [URL: Task<Data, Error>] = [:]
+    private var activeTasks: [URL: Task<Data, any Error>] = [:]
 
 
     // MARK: - Initialization
@@ -62,7 +62,7 @@ public actor RequestDeduplicator {
         }
 
         // Create new task
-        let task = Task<Data, Error> {
+        let task = Task<Data, any Error> {
             do {
                 let data = try await download(url)
                 await cleanup(url)

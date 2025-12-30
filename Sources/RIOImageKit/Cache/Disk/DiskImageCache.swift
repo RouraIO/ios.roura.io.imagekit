@@ -372,13 +372,13 @@ private extension DiskImageCache {
     /// Returns current cache performance statistics.
     ///
     /// - Returns: Statistics including hit rate, miss rate, and total requests.
-    public func getStatistics() -> CacheStatistics {
+    func getStatistics() -> CacheStatistics {
         statistics
     }
 
 
     /// Resets cache performance statistics to zero.
-    public func resetStatistics() {
+    func resetStatistics() {
         statistics = statistics.reset()
     }
 }
