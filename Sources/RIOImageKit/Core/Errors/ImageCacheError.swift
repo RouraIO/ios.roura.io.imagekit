@@ -14,8 +14,9 @@ import Foundation
 /// for display in UI.
 ///
 /// ## Overview
-/// Currently defines one error case:
+/// Error cases:
 /// - **`invalidImageData`**: Downloaded or cached data cannot be decoded as an image
+/// - **`invalidResponse`**: Network request returned an invalid or error response
 ///
 /// ## Error Handling
 /// ```swift
@@ -85,6 +86,32 @@ public enum ImageCacheError: Error {
     /// }
     /// ```
     case invalidImageData
+
+
+    /// The network response is invalid or indicates an error.
+    ///
+    /// Thrown when the HTTP response has a non-2xx status code or is missing entirely.
+    ///
+    /// **Common Causes:**
+    /// - Server returned error status (404, 500, etc.)
+    /// - Network request failed to complete
+    /// - Invalid or missing HTTP response
+    ///
+    /// **Example:**
+    /// ```swift
+    /// do {
+    ///     let image = try await downloader.loadImage(from: url)
+    /// } catch ImageCacheError.invalidResponse(let statusCode) {
+    ///     if statusCode == 404 {
+    ///         print("Image not found")
+    ///     } else {
+    ///         print("Server error: \(statusCode)")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Parameter statusCode: The HTTP status code, or -1 if response is missing
+    case invalidResponse(Int)
 }
 
 
@@ -111,7 +138,14 @@ extension ImageCacheError: LocalizedError {
     /// - Returns: A user-friendly description of the error.
     public var errorDescription: String? {
         switch self {
-        case .invalidImageData: "The downloaded data could not be converted to an image."
+        case .invalidImageData:
+            "The downloaded data could not be converted to an image."
+        case .invalidResponse(let statusCode):
+            if statusCode == -1 {
+                "Invalid network response. Please try again."
+            } else {
+                "Server returned error \(statusCode). Please try again."
+            }
         }
     }
 }

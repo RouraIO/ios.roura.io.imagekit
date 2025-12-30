@@ -40,14 +40,10 @@ public struct ImageDownloadService {
 
     // MARK: - Static Properties
 
-    /// Shared URLSession configured for image downloads with URL caching
+    /// Shared URLSession configured for image downloads
     private static let session: URLSession = {
         let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .returnCacheDataElseLoad
-        config.urlCache = URLCache(
-            memoryCapacity: ImageNetworkingConfig.URLCache.memoryCapacity,
-            diskCapacity: ImageNetworkingConfig.URLCache.diskCapacity
-        )
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
         return URLSession(configuration: config)
     }()
 
@@ -178,11 +174,11 @@ extension ImageDownloadService: ImageLoadable {
                 let (asyncBytes, response) = try await Self.session.bytes(for: request)
 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    throw ImageNetworkError.invalidResponse(-1)
+                    throw ImageCacheError.invalidResponse(-1)
                 }
 
                 guard (200..<300).contains(httpResponse.statusCode) else {
-                    throw ImageNetworkError.invalidResponse(httpResponse.statusCode)
+                    throw ImageCacheError.invalidResponse(httpResponse.statusCode)
                 }
 
                 // Collect data with progress tracking
@@ -206,7 +202,7 @@ extension ImageDownloadService: ImageLoadable {
                 lastError = error
 
                 // Don't retry on certain errors
-                if case ImageNetworkError.invalidResponse(let code) = error,
+                if case ImageCacheError.invalidResponse(let code) = error,
                    (400..<500).contains(code) && code != 408 && code != 429 {
                     // Client errors (except timeout/rate limit) shouldn't be retried
                     throw error
