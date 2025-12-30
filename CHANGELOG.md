@@ -5,7 +5,25 @@ All notable changes to RIOImageKit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-12-30
+## [1.1.0] - 2025-12-30
+
+### Added
+
+- **Documentation**
+  - Comprehensive README.md with installation instructions, usage examples, and architecture overview
+  - Comparison table with SDWebImage and Kingfisher
+  - Performance characteristics and benchmarks
+  - Quick start guide for SwiftUI and programmatic usage
+- **Licensing**
+  - MIT License for maximum adoption and community use
+  - CHANGELOG.md for tracking version history
+
+### Fixed
+
+- Made `ImageCacheError` conform to `Equatable` for testing compatibility
+- Test suite now compiles without errors
+
+## [1.0.0] - 2025-12-29
 
 ### Added
 
@@ -84,6 +102,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-- **1.0.0** (2025-12-30) - Initial public release
+- **1.1.0** (2025-12-30) - Production-ready documentation release
+- **1.0.0** (2025-12-29) - Initial feature-complete release
 
+[1.1.0]: https://github.com/yourusername/RIOImageKit/releases/tag/1.1.0
 [1.0.0]: https://github.com/yourusername/RIOImageKit/releases/tag/1.0.0
