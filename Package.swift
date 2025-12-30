@@ -5,22 +5,37 @@ import PackageDescription
 
 let package = Package(
     name: "RIOImageKit",
+    platforms: [
+        .iOS(.v18),
+        .macOS(.v15),
+        .watchOS(.v11),
+        .visionOS(.v2),
+        .tvOS(.v18)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "RIOImageKit",
             targets: ["RIOImageKit"]
         ),
     ],
+    dependencies: [],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "RIOImageKit"
+            name: "RIOImageKit",
+            dependencies: [],
+            path: "Sources/RIOImageKit",
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny")
+            ]
         ),
         .testTarget(
             name: "RIOImageKitTests",
-            dependencies: ["RIOImageKit"]
+            dependencies: ["RIOImageKit"],
+            path: "Tests/RIOImageKitTests",
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny")
+            ]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
