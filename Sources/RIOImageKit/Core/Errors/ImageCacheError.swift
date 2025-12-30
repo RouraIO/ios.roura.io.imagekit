@@ -55,7 +55,7 @@ import Foundation
 ///
 /// - SeeAlso: ``ImageDownloadService`` for operations that can throw these errors.
 /// - SeeAlso: ``ImageDecoder`` for image decoding operations.
-public enum ImageCacheError: Error {
+public enum ImageCacheError: Error, Equatable {
 
     /// The data cannot be decoded as a valid image.
     ///
