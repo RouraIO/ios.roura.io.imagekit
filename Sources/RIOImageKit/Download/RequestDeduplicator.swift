@@ -1,6 +1,6 @@
 //
 //  RequestDeduplicator.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -65,10 +65,10 @@ public actor RequestDeduplicator {
         let task = Task<Data, any Error> {
             do {
                 let data = try await download(url)
-                await cleanup(url)
+                cleanup(url)
                 return data
             } catch {
-                await cleanup(url)
+                cleanup(url)
                 throw error
             }
         }

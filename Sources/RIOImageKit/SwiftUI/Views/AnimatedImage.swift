@@ -1,6 +1,6 @@
 //
 //  AnimatedImage.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -114,7 +114,7 @@ public struct AnimatedImage: View {
 
 /// Controller for animated image playback
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, visionOS 1.0, *)
-private final class ImageAnimator: ObservableObject {
+private final class ImageAnimator: ObservableObject, @unchecked Sendable {
 
     // MARK: - Properties
 

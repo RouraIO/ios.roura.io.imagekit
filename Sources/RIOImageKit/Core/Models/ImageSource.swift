@@ -1,6 +1,6 @@
 //
 //  ImageSource.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //

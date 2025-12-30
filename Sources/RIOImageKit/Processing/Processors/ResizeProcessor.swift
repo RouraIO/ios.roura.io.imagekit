@@ -1,6 +1,6 @@
 //
 //  ResizeProcessor.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -96,14 +96,14 @@ public struct ResizeProcessor: ImageProcessor {
 
     // MARK: - ImageProcessor
 
-    public func process(_ image: PlatformImage) async throws -> PlatformImage {
+    public func process(_ image: PlatformImage) async -> PlatformImage {
 
-        try await Task.detached(priority: .userInitiated) {
+        await Task.detached(priority: .userInitiated) {
             let finalSize = calculateFinalSize(for: image.size)
 
 #if canImport(UIKit)
             let format = UIGraphicsImageRendererFormat()
-            format.scale = scale == 0 ? UIScreen.main.scale : scale
+            format.scale = await scale == 0 ? UIScreen.main.scale : scale
             format.opaque = false
 
             let renderer = UIGraphicsImageRenderer(size: finalSize, format: format)

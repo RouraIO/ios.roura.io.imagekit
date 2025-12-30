@@ -1,6 +1,6 @@
 //
 //  TintProcessor.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -52,9 +52,9 @@ public struct TintProcessor: ImageProcessor {
 
     // MARK: - ImageProcessor
 
-    public func process(_ image: PlatformImage) async throws -> PlatformImage {
+    public func process(_ image: PlatformImage) async -> PlatformImage {
 
-        try await Task.detached(priority: .userInitiated) {
+        await Task.detached(priority: .userInitiated) {
 #if canImport(UIKit)
             let format = UIGraphicsImageRendererFormat()
             format.scale = image.scale

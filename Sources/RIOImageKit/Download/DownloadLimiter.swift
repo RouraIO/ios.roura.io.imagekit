@@ -1,6 +1,6 @@
 //
 //  DownloadLimiter.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -67,7 +67,7 @@ public actor DownloadLimiter {
 
         defer {
             // Release slot when done
-            Task { await releaseSlot() }
+            Task { releaseSlot() }
         }
 
         return try await operation()

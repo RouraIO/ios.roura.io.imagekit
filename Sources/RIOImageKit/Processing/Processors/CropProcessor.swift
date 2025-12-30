@@ -1,6 +1,6 @@
 //
 //  CropProcessor.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -52,9 +52,9 @@ public struct CropProcessor: ImageProcessor {
 
     // MARK: - ImageProcessor
 
-    public func process(_ image: PlatformImage) async throws -> PlatformImage {
+    public func process(_ image: PlatformImage) async -> PlatformImage {
 
-        try await Task.detached(priority: .userInitiated) {
+        await Task.detached(priority: .userInitiated) {
 #if canImport(UIKit)
             let scale = image.scale
             let scaledRect = CGRect(

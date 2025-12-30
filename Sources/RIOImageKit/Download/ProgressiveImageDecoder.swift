@@ -1,6 +1,6 @@
 //
 //  ProgressiveImageDecoder.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -75,11 +75,15 @@ public actor ProgressiveImageDecoder {
     ///
     /// - Parameter scale: Scale factor for the decoded image. Defaults to screen scale.
     public init(scale: CGFloat = 0) {
+        if scale == 0 {
 #if canImport(UIKit)
-        self.scale = scale == 0 ? UIScreen.main.scale : scale
+            self.scale = MainActor.assumeIsolated { UIScreen.main.scale }
 #elseif canImport(AppKit)
-        self.scale = scale == 0 ? (NSScreen.main?.backingScaleFactor ?? 1.0) : scale
+            self.scale = MainActor.assumeIsolated { NSScreen.main?.backingScaleFactor ?? 1.0 }
 #endif
+        } else {
+            self.scale = scale
+        }
     }
 
 

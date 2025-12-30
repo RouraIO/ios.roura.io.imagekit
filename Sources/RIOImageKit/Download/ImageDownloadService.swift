@@ -1,6 +1,6 @@
 //
 //  ImageDownloadService.swift
-//  RouraIOTools
+//  RIOImageKit
 //
 //  Created by Christopher J. Roura on 12/29/25.
 //
@@ -45,8 +45,8 @@ public struct ImageDownloadService {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .returnCacheDataElseLoad
         config.urlCache = URLCache(
-            memoryCapacity: 50 * 1024 * 1024,  // 50MB
-            diskCapacity: 100 * 1024 * 1024     // 100MB
+            memoryCapacity: ImageNetworkingConfig.URLCache.memoryCapacity,
+            diskCapacity: ImageNetworkingConfig.URLCache.diskCapacity
         )
         return URLSession(configuration: config)
     }()
@@ -178,11 +178,11 @@ extension ImageDownloadService: ImageLoadable {
                 let (asyncBytes, response) = try await Self.session.bytes(for: request)
 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    throw NetworkError.invalidResponse(-1)
+                    throw ImageNetworkError.invalidResponse(-1)
                 }
 
                 guard (200..<300).contains(httpResponse.statusCode) else {
-                    throw NetworkError.invalidResponse(httpResponse.statusCode)
+                    throw ImageNetworkError.invalidResponse(httpResponse.statusCode)
                 }
 
                 // Collect data with progress tracking
@@ -206,7 +206,7 @@ extension ImageDownloadService: ImageLoadable {
                 lastError = error
 
                 // Don't retry on certain errors
-                if case NetworkError.invalidResponse(let code) = error,
+                if case ImageNetworkError.invalidResponse(let code) = error,
                    (400..<500).contains(code) && code != 408 && code != 429 {
                     // Client errors (except timeout/rate limit) shouldn't be retried
                     throw error
