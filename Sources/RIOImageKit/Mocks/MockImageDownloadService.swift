@@ -33,7 +33,11 @@ import Foundation
 ///     diskCache: try! DiskImageCache()
 /// )
 /// ```
-struct MockImageDownloadService {}
+public struct MockImageDownloadService {
+
+    /// Creates a new mock image download service.
+    public init() {}
+}
 
 // MARK: - ImageLoadable Conformance
 
@@ -44,7 +48,7 @@ extension MockImageDownloadService: ImageLoadable {
     /// - Parameter url: The URL (ignored in mock).
     /// - Returns: A placeholder SF Symbol image.
     /// - Throws: Never throws in the mock implementation.
-    func loadImage(from url: URL) async throws -> PlatformImage {
+    public func loadImage(from url: URL) async throws -> PlatformImage {
         try await loadImage(from: url, progress: { _ in })
     }
 
@@ -59,7 +63,7 @@ extension MockImageDownloadService: ImageLoadable {
     ///   - progress: A closure called with simulated progress (0.0 to 1.0).
     /// - Returns: A placeholder SF Symbol image (bitcoinsign.circle.fill).
     /// - Throws: Never throws in the mock implementation.
-    func loadImage(from url: URL, progress: @escaping @Sendable (Double) -> Void) async throws -> PlatformImage {
+    public func loadImage(from url: URL, progress: @escaping @Sendable (Double) -> Void) async throws -> PlatformImage {
 
         // Simulate network delay with progress updates
         let steps = 10
@@ -82,7 +86,7 @@ extension MockImageDownloadService: ImageLoadable {
     /// The mock doesn't actually prefetch images, so this method does nothing.
     ///
     /// - Parameter urls: The URLs to prefetch (ignored).
-    func prefetchImages(urls: [URL]) async {
+    public func prefetchImages(urls: [URL]) async {
         // No-op for mock
     }
 
@@ -92,7 +96,7 @@ extension MockImageDownloadService: ImageLoadable {
     /// The mock doesn't track prefetch operations, so this method does nothing.
     ///
     /// - Parameter urls: The URLs to cancel prefetching for (ignored).
-    func cancelPrefetch(for urls: [URL]) {
+    public func cancelPrefetch(for urls: [URL]) {
         // No-op for mock
     }
 }
