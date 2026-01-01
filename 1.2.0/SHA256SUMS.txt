@@ -1,0 +1,2 @@
+eac32a52e59ad2ec6f4cbca1b34c5c0eb3461a9803dac784096e805d5b9ea81e  RIOImageKit-1.2.0.zip
+e0dc5167ab1abe3271b850f2437855ad196a8bf7a209438c43d6a4c9ba7cc5f9  RIOImageKit-1.2.0.tar.gz
