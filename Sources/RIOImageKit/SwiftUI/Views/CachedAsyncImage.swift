@@ -46,6 +46,19 @@ import SwiftUI
 /// - Error handling
 /// - Cancellation on view disappear
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, visionOS 1.0, *)
+@available(*, deprecated, renamed: "RouraIOImage", message: """
+    CachedAsyncImage is deprecated. Use RouraIOImage instead for a unified API that supports \
+    remote URLs, local assets, and SF Symbols.
+
+    Migration example:
+    // Old:
+    CachedAsyncImage(url: imageURL)
+
+    // New:
+    RouraIOImage(source: .remote(imageURL))
+
+    For more information, see RouraIOImage documentation.
+    """)
 public struct CachedAsyncImage<Content: View, Placeholder: View>: View {
 
     // MARK: - Properties

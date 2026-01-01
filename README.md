@@ -56,38 +56,120 @@ struct ContentView: View {
     let imageURL = URL(string: "https://example.com/image.jpg")!
 
     var body: some View {
-        CachedAsyncImage(url: imageURL)
+        // Remote image with automatic caching
+        RouraIOImage(source: .remote(imageURL))
             .frame(width: 300, height: 300)
     }
 }
 ```
 
-### With Placeholder and Error Handling
+### Unified API for All Image Sources
+
+`RouraIOImage` provides a single, consistent API for loading images from any source:
 
 ```swift
-CachedAsyncImage(url: imageURL) { state in
-    switch state {
-    case .idle, .loading:
-        ProgressView()
-    case .success(let image):
-        Image(uiImage: image)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-    case .failure(let error):
+// Remote image (cached by default)
+RouraIOImage(source: .remote(url))
+
+// Local asset from asset catalog
+RouraIOImage(source: .asset("logo"))
+
+// SF Symbol
+RouraIOImage(source: .symbol("heart.fill"))
+    .foregroundColor(.red)
+```
+
+### With Customization Modifiers
+
+```swift
+RouraIOImage(source: .remote(imageURL))
+    .placeholder {
+        ZStack {
+            Color.gray.opacity(0.2)
+            ProgressView()
+        }
+    }
+    .onLoading { progress in
+        if let progress = progress {
+            VStack {
+                ProgressView(value: progress)
+                Text("\(Int(progress * 100))%")
+                    .font(.caption)
+            }
+        } else {
+            ProgressView()
+        }
+    }
+    .onError { error in
         VStack {
-            Image(systemName: "photo")
+            Image(systemName: "exclamationmark.triangle")
+                .foregroundColor(.red)
             Text("Failed to load")
                 .font(.caption)
         }
     }
-}
+    .showProgress(true)
+    .aspectFill()
+    .frame(width: 300, height: 200)
+    .roundedCorners(12)
 ```
 
-### With Progress Indicator
+### Cache Configuration
 
 ```swift
+// Disable caching for sensitive images
+RouraIOImage(source: .remote(privatePhotoURL))
+    .disableCache()
+
+// Use custom cache manager
+let customCache = ImageCacheManager(...)
+RouraIOImage(source: .remote(temporaryURL))
+    .cache(manager: customCache)
+
+// Control animation
+RouraIOImage(source: .remote(url))
+    .animated(duration: 0.5)  // Custom animation duration
+    // or .animated(duration: 0)  // Disable animation
+```
+
+### Migration from CachedAsyncImage
+
+`CachedAsyncImage` is now deprecated in favor of `RouraIOImage`. Migration is straightforward:
+
+```swift
+// Old:
+CachedAsyncImage(url: imageURL)
+
+// New:
+RouraIOImage(source: .remote(imageURL))
+
+// Old: With progress
 CachedAsyncImage(url: imageURL, showProgress: true)
-    .frame(width: 300, height: 300)
+
+// New: With progress
+RouraIOImage(source: .remote(imageURL))
+    .showProgress(true)
+
+// Old: Custom rendering
+CachedAsyncImage(url: imageURL) { state in
+    switch state {
+    case .success(let image):
+        Image(uiImage: image).resizable()
+    case .failure:
+        Image(systemName: "xmark.circle")
+    default:
+        ProgressView()
+    }
+}
+
+// New: Modifier-based approach
+RouraIOImage(source: .remote(imageURL))
+    .onLoading { _ in
+        ProgressView()
+    }
+    .onError { _ in
+        Image(systemName: "xmark.circle")
+    }
 ```
 
 ## Usage
@@ -222,10 +304,16 @@ RIOImageKit uses a clean, layered architecture:
 ```
 ┌─────────────────────────────────────────┐
 │         SwiftUI Views                   │
-│   (CachedAsyncImage, AnimatedImage)     │
+│   (RouraIOImage, AnimatedImage)         │
 └─────────────────────────────────────────┘
                     │
-                    ▼
+           ┌────────┴────────┐
+           │                 │
+           ▼                 ▼
+    (Remote URLs)      (Assets/Symbols)
+           │                 │
+           │                 └──> SwiftUI Image
+           ▼
 ┌─────────────────────────────────────────┐
 │      ImageCacheManager                  │
 │   (Coordinates caching & loading)       │
@@ -253,12 +341,14 @@ RIOImageKit uses a clean, layered architecture:
 
 ### Key Components
 
-- **`CachedAsyncImage`**: SwiftUI view for async image loading with caching
+- **`RouraIOImage`**: Unified SwiftUI view for all image sources (remote, asset, symbol) with modifier-based customization
+- **`CachedAsyncImage`**: *(Deprecated)* Legacy SwiftUI view for async image loading
 - **`ImageCacheManager`**: Central coordinator for two-tier caching
 - **`MemoryImageCache`**: Fast, volatile in-memory cache
 - **`DiskImageCache`**: Persistent disk cache with LRU eviction
 - **`ImageDownloadService`**: Network downloader with retry and progress tracking
 - **`ImageProcessor`**: Image transformation utilities (resize, crop, blur, etc.)
+- **`ImageSource`**: Type-safe enum for specifying image sources (`.remote`, `.asset`, `.symbol`)
 
 ## Testing
 
